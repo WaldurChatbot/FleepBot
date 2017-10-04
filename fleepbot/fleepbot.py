@@ -1,9 +1,6 @@
 # Derived from https://github.com/fleephub/fleep-api/blob/master/python-client/chatbot.py
 
-import sys
-sys.path.insert(0, '../')  # important for common import
 from common import request
-
 import uuid
 import base64
 import time
