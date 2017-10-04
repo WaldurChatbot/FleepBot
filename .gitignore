@@ -1,0 +1,23 @@
+# intellij stuff
+.idea/
+*.iml
+
+# java build stuff
+target/
+
+# vim stuff
+*~
+
+# sensitive info
+.token
+.config
+configuration.ini
+
+# python build stuff
+__pycache__/
+*.pyc
+.cache/
+
+# chatterbot db
+chatterbotdb.sqlite3.db
+
