@@ -17,7 +17,7 @@ fi
 git pull
 
 # install requirements
-sudo pip install -r requirements.txt
+sudo pip install -r requirements.txt --upgrade
 
 # kill all python processes
 [ -f pid ] && kill `cat pid`
@@ -27,4 +27,13 @@ cd fleepbot
 nohup python3.5 fleepbot.py > /dev/null 2>&1 & echo $! > ../pid
 echo "Started fleep bot"
 
-exit 0
+sleep 5
+
+if ps -p `cat ../pid` > /dev/null
+then
+   echo "`cat ../pid` is running"
+   exit 0
+else
+   echo "Fleep bot is not running"
+   exit 100
+fi
