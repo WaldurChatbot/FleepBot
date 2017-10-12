@@ -1,16 +1,16 @@
 # Derived from https://github.com/fleephub/fleep-api/blob/master/python-client/chatbot.py
 
-from common.request import Connection
 import uuid
 import base64
 import time
-import logging, logging.config, logging.handlers
 from configparser import ConfigParser
 from fleepclient.cache import FleepCache
 from fleepclient.utils import convert_xml_to_text
+import __init__ as init
+from common.request import BackendConnection
 
-logging.config.fileConfig('../logging_config.ini', disable_existing_loggers = False)
-log = logging.getLogger(__name__)
+
+log = init.getLogger(__name__)
 
 config = ConfigParser()
 config.read('../configuration.ini')
@@ -23,7 +23,7 @@ chatid = fleep['chatid']
 backend = config['backend']
 url = backend['url'] + ':' + backend['port']
 
-conn = Connection(url)
+conn = BackendConnection(url)
 
 
 def uuid_decode(b64uuid):
