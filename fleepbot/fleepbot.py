@@ -32,21 +32,18 @@ def uuid_decode(b64uuid):
     return str(uobj)
 
 
-def process_msg(chat, msg):
-    if msg.mk_message_type == 'text':
-        txt = convert_xml_to_text(msg.message).strip()
-        log.debug("got msg: %r" % msg.__dict__)
-        chat.mark_read(msg.message_nr)
-        log.debug('text: %s' % txt)
-        if txt[:1] == "!":
-            chat.message_send(str(query(txt[1:])))
+def process_message(chat, message):
+    if message.mk_message_type != 'text':
+        return
 
+    chat.mark_read(message.message_nr)
+    user_id = message.account_id
+    message = convert_xml_to_text(message.message).strip()
 
-def query(input):
-    log.info("IN:  " + input)
-    response = conn.query(input)
-    log.info("OUT: " + response['message'])
-    return response['message']
+    response = conn.get_response(message, user_id)
+
+    if response is not None:
+        chat.message_send(response)
 
 
 def main():
@@ -69,7 +66,8 @@ def main():
             msg = chat.get_next_message(chat_msg_nr)
             if not msg:
                 break
-            process_msg(chat, msg)
+
+            process_message(chat, msg)
             chat_msg_nr = msg.message_nr
 
         if not fc.poll():
