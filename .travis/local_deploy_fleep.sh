@@ -13,7 +13,7 @@ SCRIPT="fleepbot.py"
 
 # we are working on the assumption that the remote server already has cloned this repo
 cd ${NAME}
-
+git stash
 git checkout master
 git pull
 
