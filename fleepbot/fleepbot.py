@@ -42,8 +42,8 @@ def process_message(chat, message):
 
     response = conn.get_response(message, user_id)
 
-    if response is not None:
-        chat.message_send(response)
+    if response is not None and  response[0] is not None:
+        chat.message_send(str(response))
 
 
 def main():
