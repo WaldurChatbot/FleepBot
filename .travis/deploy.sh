@@ -4,16 +4,16 @@
 # Moves remote deploy script to remote machine and executes it
 
 echo "Starting deployment"
-# variables in travis
+# encrypted variables in travis
 USER=${PRODUSER}
 REMOTE=${PRODREMOTE}
 KEY=${encrypted_ec52fa39a227_key}
 IV=${encrypted_ec52fa39a227_iv}
 
-# paths
-SCRIPT="local_deploy_fleep.sh"
-ENCRYPTED_KEY=".travis/deploy_rsa.enc"
-DECRYPTED_KEY=".travis/deploy_rsa"
+# variables in .travis.yml
+SCRIPT=${LOCAL_DEPLOY_SCRIPT}
+ENCRYPTED_KEY=${TRAVIS_DIR}"deploy_rsa.enc"
+DECRYPTED_KEY=${TRAVIS_DIR}"deploy_rsa"
 
 echo "Decrypting private key"
 openssl aes-256-cbc \
@@ -26,7 +26,7 @@ openssl aes-256-cbc \
 chmod 600 ${DECRYPTED_KEY}
 
 echo "Moving ${SCRIPT} to remote"
-scp -o "StrictHostKeyChecking no" -i ${DECRYPTED_KEY} .travis/${SCRIPT} ${USER}@${REMOTE}:~/
+scp -o "StrictHostKeyChecking no" -i ${DECRYPTED_KEY} ${TRAVIS_DIR}${SCRIPT} ${USER}@${REMOTE}:~/
 
 echo "Executing ${SCRIPT} in remote"
 ssh -o "StrictHostKeyChecking no" -i ${DECRYPTED_KEY} ${USER}@${REMOTE} ./${SCRIPT}
