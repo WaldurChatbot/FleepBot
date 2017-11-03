@@ -12,6 +12,10 @@
 PATH=${PATH_TO_RUN_SCRIPT}
 SCRIPT=${RUN_SCRIPT}
 
+echo ${PATH}
+echo ${SCRIPT}
+echo ${NAME}
+
 cd ${NAME}
 git stash
 git checkout master
