@@ -26,7 +26,15 @@ openssl aes-256-cbc \
 chmod 600 ${DECRYPTED_KEY}
 
 echo "Moving ${SCRIPT} to remote"
-scp -o "StrictHostKeyChecking no" -i ${DECRYPTED_KEY} ${TRAVIS_DIR}${SCRIPT} ${USER}@${REMOTE}:~/
+scp \
+    -o "StrictHostKeyChecking no" \
+    -i ${DECRYPTED_KEY} \
+    ${TRAVIS_DIR}${SCRIPT} \
+    ${USER}@${REMOTE}:~/
 
 echo "Executing ${SCRIPT} in remote"
-ssh -o "StrictHostKeyChecking no" -i ${DECRYPTED_KEY} ${USER}@${REMOTE} ./${SCRIPT}
+ssh \
+    -o "StrictHostKeyChecking no" \
+    -i ${DECRYPTED_KEY} \
+    ${USER}@${REMOTE} \
+    ./${SCRIPT} ${NAME} ${PATH_TO_RUN_SCRIPT} ${RUN_SCRIPT}

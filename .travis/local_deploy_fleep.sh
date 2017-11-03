@@ -8,13 +8,10 @@
 
 # we are working on the assumption that the remote server already has cloned this repo
 
-# variables in .travis.yml
-PATH=${PATH_TO_RUN_SCRIPT}
-SCRIPT=${RUN_SCRIPT}
-
-echo ${PATH}
-echo ${SCRIPT}
-echo ${NAME}
+# get arguments from command line
+NAME=${1}
+PATH=${2}
+SCRIPT=${3}
 
 cd ${NAME}
 git stash
