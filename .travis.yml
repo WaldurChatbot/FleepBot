@@ -7,7 +7,7 @@ env:
     global:
         - NAME=FleepBot
         - TRAVIS_DIR=.travis/
-        - LOCAL_DEPLOY_SCRIPT=local_deploy_fleep.sh
+        - LOCAL_DEPLOY_SCRIPT=local_deploy.sh
         - PATH_TO_RUN_SCRIPT=fleepbot
         - RUN_SCRIPT=fleepbot.py
 
