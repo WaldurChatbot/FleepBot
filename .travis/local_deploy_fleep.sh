@@ -10,7 +10,7 @@
 
 # get arguments from command line
 NAME=${1}
-PATH=${2}
+PATH_TO_SCRIPT=${2}
 SCRIPT=${3}
 
 cd ${NAME}
@@ -25,9 +25,9 @@ sudo pip install -r requirements.txt --upgrade
 [ -f pid ] && kill `cat pid`
 
 # start process and save pid to file 'pid'
-cd ${PATH}
+cd ${PATH_TO_SCRIPT}
 nohup python3.5 ${SCRIPT} > /dev/null 2>&1 & echo $! > ../pid
-echo "Started ${PATH}/${SCRIPT}"
+echo "Started ${PATH_TO_SCRIPT}/${SCRIPT}"
 
 sleep 5
 
