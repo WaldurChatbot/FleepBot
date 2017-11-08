@@ -12,21 +12,51 @@
 NAME=${1}
 PATH_TO_SCRIPT=${2}
 SCRIPT=${3}
+BRANCH=${4}
+CLONE_URL=${5}
 
-cd ${NAME}
-git stash
-git checkout master
-git pull
+echo "NAME=${NAME}"
+echo "PATH_TO_SCRIPT=${PATH_TO_SCRIPT}"
+echo "SCRIPT=${SCRIPT}"
+echo "BRANCH=${BRANCH}"
+echo "CLONE_URL=${CLONE_URL}"
+
+# install stuff if necessary
+if ! command -v git || ! command -v pip3
+then
+    sudo apt-get update
+fi
+
+if ! command -v git
+then
+    sudo apt-get install -y git
+fi
+
+if ! command -v pip3
+then
+    sudo apt-get install -y python3-pip
+fi
+
+# if dir exists, we assume the repo is already cloned
+if cd ${NAME}
+then
+    git stash
+    git checkout ${BRANCH}
+    git pull
+else
+    git clone -b ${BRANCH} ${CLONE_URL}
+    cd ${NAME}
+fi
 
 # install requirements
-sudo pip install -r requirements.txt --upgrade
+sudo pip3 install -r requirements.txt --upgrade
 
 # kill process if running
 [ -f pid ] && kill `cat pid`
 
 # start process and save pid to file 'pid'
 cd ${PATH_TO_SCRIPT}
-nohup python3.5 ${SCRIPT} > /dev/null 2>&1 & echo $! > ../pid
+nohup python3.5 ${SCRIPT} > raw.out 2>&1 & echo $! > ../pid
 echo "Started ${PATH_TO_SCRIPT}/${SCRIPT}"
 
 sleep 5

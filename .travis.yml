@@ -18,9 +18,14 @@ script:
         pytest fleepbot/test/tests.py
 
 deploy:
-        provider: script
-        script: sh .travis/deploy.sh
+     -  provider: script
+        script: bash .travis/deploy.sh
         on:
                 branch: master
-                python: "3.5"
+                python: '3.5'
 
+     -  provider: script
+        script: bash .travis/deploy.sh
+        on:
+                branch: develop
+                python: '3.5'
