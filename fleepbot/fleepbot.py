@@ -3,17 +3,28 @@
 import uuid
 import base64
 import time
+import os
 from configparser import ConfigParser
 from fleepclient.cache import FleepCache
 from fleepclient.utils import convert_xml_to_text
-import __init__ as init
+from logging import getLogger
+from logging.config import fileConfig
 from common.request import BackendConnection
 
+fileConfig("../logging_config.ini")
+log = getLogger(__name__)
 
-log = init.getLogger(__name__)
+# If config file location is setup in environment variables
+# then read conf from there, otherwise from project root
+if 'WALDUR_CONFIG' in os.environ:
+    config_path = os.environ['WALDUR_CONFIG']
+else:
+    config_path = '../configuration.ini'
 
+log.info("Reading config from {}".format(config_path))
 config = ConfigParser()
-config.read('../configuration.ini')
+config.read(config_path)
+
 fleep = config['fleep']
 username = fleep['user']
 password = fleep['pass']
