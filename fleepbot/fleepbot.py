@@ -10,6 +10,7 @@ from fleepclient.utils import convert_xml_to_text
 from logging import getLogger
 from logging.config import fileConfig
 from common.request import BackendConnection
+import common.graphs as graphs
 
 fileConfig("../logging_config.ini")
 log = getLogger(__name__)
@@ -54,7 +55,16 @@ def process_message(chat, message):
     response = conn.get_response(message, user_id)
 
     if response is not None and  response[0] is not None:
-        chat.message_send(str(response))
+        for item in response:
+            if item['type'] == 'text':
+                chat.message_send(item['data'])
+            elif item['type'] == 'graph':
+                chat.message_send("This is not fully implemented yet. Sorry!")
+                #chat.message_send(message="graph", attachments=graphs.make_graph(item['data']))
+            else:
+                raise Exception("Unknown response type")
+
+
 
 
 def main():
