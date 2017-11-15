@@ -1,5 +1,5 @@
 # Derived from https://github.com/fleephub/fleep-api/blob/master/python-client/chatbot.py
-
+import traceback
 import uuid
 import base64
 import time
@@ -80,18 +80,21 @@ def main():
     chat_msg_nr = chat.read_message_nr
 
     log.info("Bot initialized")
-    while True:
+    try:
         while True:
-            msg = chat.get_next_message(chat_msg_nr)
-            if not msg:
-                break
+            while True:
+                msg = chat.get_next_message(chat_msg_nr)
+                if not msg:
+                    break
 
-            process_message(chat, msg)
-            chat_msg_nr = msg.message_nr
+                process_message(chat, msg)
+                chat_msg_nr = msg.message_nr
 
-        if not fc.poll():
-            time.sleep(1)
-            continue
+            if not fc.poll():
+                time.sleep(1)
+                continue
+    except Exception as e:
+        log.exception(e)
 
 
 if __name__ == '__main__':
