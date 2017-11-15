@@ -9,11 +9,11 @@ from fleepclient.cache import FleepCache
 from fleepclient.utils import convert_xml_to_text
 from logging import getLogger
 from logging.config import fileConfig
-from common.request import BackendConnection
-import common.graphs as graphs
 
 fileConfig("../logging_config.ini")
 log = getLogger(__name__)
+
+from common.request import BackendConnection
 
 # If config file location is setup in environment variables
 # then read conf from there, otherwise from project root
@@ -54,17 +54,15 @@ def process_message(chat, message):
 
     response = conn.get_response(message, user_id)
 
-    if response is not None and  response[0] is not None:
+    if response is not None and response[0] is not None:
         for item in response:
             if item['type'] == 'text':
                 chat.message_send(item['data'])
             elif item['type'] == 'graph':
                 chat.message_send("This is not fully implemented yet. Sorry!")
-                #chat.message_send(message="graph", attachments=graphs.make_graph(item['data']))
+                # chat.message_send(message="graph", attachments=graphs.make_graph(item['data']))
             else:
                 raise Exception("Unknown response type")
-
-
 
 
 def main():
