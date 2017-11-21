@@ -1,14 +1,17 @@
 # Derived from https://github.com/fleephub/fleep-api/blob/master/python-client/chatbot.py
-import traceback
-import uuid
 import base64
-import time
+import http.client as hc
 import os
+import time
+import uuid
 from configparser import ConfigParser
-from fleepclient.cache import FleepCache
-from fleepclient.utils import convert_xml_to_text
 from logging import getLogger
 from logging.config import fileConfig
+
+from fleepclient.cache import FleepCache
+from fleepclient.utils import convert_xml_to_text
+
+hc.HTTPConnection.debuglevel = 1
 
 fileConfig("../logging_config.ini")
 log = getLogger(__name__)
@@ -52,7 +55,16 @@ def process_message(chat, message):
     user_id = message.account_id
     message = convert_xml_to_text(message.message).strip()
 
-    response = conn.get_response(message, user_id)
+    if message is None or len(message) == 1:
+        return
+
+    prefix = message[0]
+    if prefix == '!':
+        response = conn.get_response(message[1:], user_id)
+    elif prefix == '?':
+        response = conn.set_token(message[1:], user_id)
+    else:
+        response = []
 
     if response is not None and response[0] is not None:
         for item in response:
@@ -60,7 +72,6 @@ def process_message(chat, message):
                 chat.message_send(item['data'])
             elif item['type'] == 'graph':
                 chat.message_send("This is not fully implemented yet. Sorry!")
-                # chat.message_send(message="graph", attachments=graphs.make_graph(item['data']))
             else:
                 raise Exception("Unknown response type")
 
