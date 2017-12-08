@@ -9,5 +9,6 @@ Fleep frontend implementation for Waldur chatbot.
 3. Use pip to install necessary requirements.  
         `pip install -r requirements.txt`
 4. Setup configuration.ini according to .configuration.ini
+5. Run chatbot's frontend from file "telegram.py" in the telegrambot module.  
 
 In order to make use of this bot you should also setup WaldurChatbot backend: https://github.com/WaldurChatbot/Waldur-Chatbot
